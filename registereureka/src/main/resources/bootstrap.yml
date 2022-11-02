@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: msregistereureka
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:4444
