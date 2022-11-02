@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: msreports
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:4444

@@ -1,0 +1,13 @@
+#HTTP Server
+server:
+  port: 4444
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          default-label: main
+          uri: https://github.com/buenocjm/config-server
+  application:
+    name: config-server
+       
