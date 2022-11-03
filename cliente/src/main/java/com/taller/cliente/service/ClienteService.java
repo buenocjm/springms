@@ -1,5 +1,6 @@
 package com.taller.cliente.service;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.netflix.discovery.EurekaClient;
 import com.taller.cliente.exception.ModelNotFoundException;
 import com.taller.cliente.model.cliente;
 import com.taller.cliente.model.reportm;
@@ -15,7 +17,9 @@ import com.taller.cliente.repository.ClienteRepository;
 @Service
 public class ClienteService  {
 
-
+	@Autowired
+	private EurekaClient eureka;
+	
     private ClienteRepository clienteRepository = null;
     
     @Autowired
@@ -57,9 +61,11 @@ public class ClienteService  {
         }
     }
     
+
 	@SuppressWarnings("unchecked")
 	public List<reportm> getReportsAll(int client){
-		List<reportm> reportsAll = restTemplate.getForObject("http://localhost:8086/informeordenservicio/", List.class);
+		List<reportm> reportsAll = restTemplate.getForObject("http://MSREPORT/informeordenservicio/", List.class);
+		//List<reportm> reportsAll = restTemplate.getForObject("http://localhost:8086/informeordenservicio/", List.class);
 				return reportsAll;
 	}
 
