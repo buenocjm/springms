@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.netflix.discovery.EurekaClient;
+
 import com.taller.cliente.exception.ModelNotFoundException;
 import com.taller.cliente.model.cliente;
 import com.taller.cliente.model.reportm;
@@ -17,14 +20,20 @@ import com.taller.cliente.repository.ClienteRepository;
 @Service
 public class ClienteService  {
 
-	@Autowired
-	private EurekaClient eureka;
-	
     private ClienteRepository clienteRepository = null;
     
     @Autowired
     private RestTemplate restTemplate;
+    
+    @Autowired
+	private EurekaClient eureka;
 
+	@Bean
+	@LoadBalanced
+	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+		return builder.build();
+	}
+    
     @Autowired
     public void ClienteServiceImpl(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
@@ -58,14 +67,14 @@ public class ClienteService  {
             return client.get();
         }else{
             throw new ModelNotFoundException("Error al encontrar al cliente");
-        }
+        } 
     }
     
 
 	@SuppressWarnings("unchecked")
-	public List<reportm> getReportsAll(int client){
-		List<reportm> reportsAll = restTemplate.getForObject("http://MSREPORT/informeordenservicio/", List.class);
-		//List<reportm> reportsAll = restTemplate.getForObject("http://localhost:8086/informeordenservicio/", List.class);
+	public List<reportm> getReportsAll(){
+		URI catalogoURI = eureka.getUri("MSGATEWAYZUUL");
+		List<reportm> reportsAll = restTemplate.getForObject("http://"+catalogoURI.getHost()+":"+catalogoURI.getPort()+"/inform/informeordenservicio", List.class);
 				return reportsAll;
 	}
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.taller.cliente.model.cliente;
 import com.taller.cliente.model.reportm;
 import com.taller.cliente.service.ClienteService;
@@ -33,18 +34,23 @@ public class ClienteController {
         return  clienteService.findAll();
     }
 
-
-    @GetMapping("/informeorden/{id}")
-    public ResponseEntity<List<reportm>> getReportsMS (@PathVariable("id") int idCliente) {
-    	cliente Cliente = clienteService.leerPorId(idCliente);
-    	if (Cliente == null) {
-    		return ResponseEntity.notFound().build();
-    	}
+    @HystrixCommand(fallbackMethod = "fallbackMethod")
+    @GetMapping("/informeorden")
+    public ResponseEntity<List<reportm>> getReportsMS () {
+    	//cliente Cliente = clienteService.leerPorId(idCliente);
+    	//if (Cliente == null) {
+    		//return ResponseEntity.notFound().build();
+    	//}
     	
-        List<reportm> lista = clienteService.getReportsAll(idCliente);
+        List<reportm> lista = clienteService.getReportsAll();
         return new ResponseEntity<List<reportm>>(lista, HttpStatus.OK);
     }
 
+    @SuppressWarnings("unused")
+	private reportm fallbackMethod() {
+    	//	tracer.currentSpan().tag("error", "No esta disponible informe orden");
+    		return new reportm (1,"0","Articulo de prueba","prueba","111", "38.5", "dasdasd");
+    	}   
 	
     @PostMapping
     public cliente save(@RequestBody cliente clientCurrent){
