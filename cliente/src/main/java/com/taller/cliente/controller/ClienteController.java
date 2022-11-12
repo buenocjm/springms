@@ -47,9 +47,9 @@ public class ClienteController {
     }
 
     @SuppressWarnings("unused")
-	private reportm fallbackMethod() {
+	private ResponseEntity<List<reportm>> fallbackMethod() {
     	//	tracer.currentSpan().tag("error", "No esta disponible informe orden");
-    		return new reportm (1,"0","Articulo de prueba","prueba","111", "38.5", "dasdasd");
+    		return ResponseEntity.notFound().build();
     	}   
 	
     @PostMapping
