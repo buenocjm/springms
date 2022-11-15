@@ -5,7 +5,7 @@ output/
 **/build/
 **/dashbohys/
 **/.metadata/
-**/zk-single-kafka-multiple
+zk-single-kafka-multiple
 
 **/gradle_build/
 *.iml
