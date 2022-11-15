@@ -23,16 +23,26 @@ public class ClienteController {
 
    
     private final ClienteService clienteService;
-
+    
     @Autowired
     public ClienteController(ClienteService clienteService) {
-        this.clienteService = clienteService;
+    	this.clienteService = clienteService;
+	
     }
 
     @GetMapping
     public List<cliente> findAll(){
         return  clienteService.findAll();
     }
+    
+    @GetMapping("/{id}")
+	public ResponseEntity<cliente> obtenercliente(@PathVariable("id") int id) {
+		cliente client = clienteService.getClienteById(id);
+		if (client == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(client);
+	}
 
     @HystrixCommand(fallbackMethod = "fallbackMethod")
     @GetMapping("/informeorden")
@@ -56,6 +66,8 @@ public class ClienteController {
     public cliente save(@RequestBody cliente clientCurrent){
         return clienteService.save(clientCurrent);
     }
+    
+    
     
     
     

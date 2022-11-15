@@ -3,6 +3,7 @@ package com.taller.report.controller;
 
 
 import com.taller.report.service.InformeOrdenServicioService;
+
 import com.taller.report.exception.ModelNotFoundException;
 import com.taller.report.model.InformeOrdenServicio;
 
@@ -31,9 +32,25 @@ public class InformeOrdenServicioController {
         List<InformeOrdenServicio> lista = informeOrdenServicioService.findAll();
         return new ResponseEntity<List<InformeOrdenServicio>>(lista, HttpStatus.OK);
     }
+ 
+    @GetMapping("/{id}")
+  	public ResponseEntity<InformeOrdenServicio> obtenercliente(@PathVariable("id") int id) {
+    	InformeOrdenServicio reports = informeOrdenServicioService.getReportsById(id);
+  		if (reports == null) {
+  			return ResponseEntity.notFound().build();
+  		}
+  		return ResponseEntity.ok(reports);
+  	}
 
-
-
+    @GetMapping("/clientes/{idclient}")
+ 	public ResponseEntity<List<InformeOrdenServicio>> getReportsbyclient(@PathVariable("idclient") int id){
+ 		List<InformeOrdenServicio> reportsClientall = informeOrdenServicioService.byIdcliente(id);
+ 		if(reportsClientall.isEmpty()) {
+ 			return ResponseEntity.noContent().build();
+ 		}
+ 		return ResponseEntity.ok(reportsClientall);
+ 	
+    }
     
 
     @PostMapping

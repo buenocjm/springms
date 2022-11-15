@@ -3,15 +3,12 @@ package com.taller.cliente.service;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-
 import com.taller.cliente.exception.ModelNotFoundException;
 import com.taller.cliente.model.cliente;
 import com.taller.cliente.model.reportm;
@@ -21,12 +18,14 @@ import com.taller.cliente.repository.ClienteRepository;
 public class ClienteService  {
 
     private ClienteRepository clienteRepository = null;
-    
+       
     @Autowired
     private RestTemplate restTemplate;
     
     @Autowired
 	private EurekaClient eureka;
+
+	private ClienteEventsService clienteeventsservice;
 
 	@Bean
 	@LoadBalanced
@@ -35,8 +34,9 @@ public class ClienteService  {
 	}
     
     @Autowired
-    public void ClienteServiceImpl(ClienteRepository clienteRepository) {
+    public void ClienteServiceImpl(ClienteRepository clienteRepository, ClienteEventsService clienteeventsservice) {
         this.clienteRepository = clienteRepository;
+        this.clienteeventsservice = clienteeventsservice;
     }
 
 
@@ -46,6 +46,7 @@ public class ClienteService  {
 
 
     public cliente save(cliente clientCurrent) {
+		this.clienteeventsservice.publish(clientCurrent);
         return clienteRepository.save(clientCurrent);
     }
 
@@ -70,6 +71,9 @@ public class ClienteService  {
         } 
     }
     
+    public cliente getClienteById(int id) {
+		return clienteRepository.findById(id).orElse(null);
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<reportm> getReportsAll(){

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import com.taller.orders.exception.ModelNotFoundException;
 import com.taller.orders.model.OrdenesServicio;
 import com.taller.orders.repository.OrdenesServiciorepository;
@@ -52,4 +53,13 @@ public class OrdeneServicioService {
         ordenesServiciorepository.deleteById(id);
         return true;
     }
+    
+    public OrdenesServicio getOrdersById(int id) {
+ 		return ordenesServiciorepository.findById(id).orElse(null);
+ 	}
+    
+    
+    public List<OrdenesServicio> byIdcliente(int Idclient){
+		return ordenesServiciorepository.findByIdcliente(Idclient);
+	}
 }
