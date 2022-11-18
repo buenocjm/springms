@@ -10,8 +10,4 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class clientevent extends Event<cliente>{
-
-
-
-	
 }

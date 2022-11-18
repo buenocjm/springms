@@ -9,8 +9,8 @@
 		<version>2.3.7.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.taller.securityms</groupId>
-	<artifactId>securityms</artifactId>
+	<groupId>com.talle.securityms</groupId>
+	<artifactId>security</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>securityms</name>
 

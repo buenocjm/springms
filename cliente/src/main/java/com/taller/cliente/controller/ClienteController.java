@@ -1,6 +1,7 @@
 package com.taller.cliente.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.taller.cliente.model.cliente;
 import com.taller.cliente.model.reportm;
 import com.taller.cliente.service.ClienteService;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @RestController
 @RequestMapping(value = "/cliente")
@@ -44,23 +47,17 @@ public class ClienteController {
 		return ResponseEntity.ok(client);
 	}
 
-    @HystrixCommand(fallbackMethod = "fallbackMethod")
+	@CircuitBreaker(name = "cirBreports", fallbackMethod = "fallBackReports")
     @GetMapping("/informeorden")
-    public ResponseEntity<List<reportm>> getReportsMS () {
-    	//cliente Cliente = clienteService.leerPorId(idCliente);
-    	//if (Cliente == null) {
-    		//return ResponseEntity.notFound().build();
-    	//}
-    	
+    public ResponseEntity<List<reportm>> getReportsMS () {   	
         List<reportm> lista = clienteService.getReportsAll();
         return new ResponseEntity<List<reportm>>(lista, HttpStatus.OK);
     }
 
-    @SuppressWarnings("unused")
-	private ResponseEntity<List<reportm>> fallbackMethod() {
-    	//	tracer.currentSpan().tag("error", "No esta disponible informe orden");
-    		return ResponseEntity.notFound().build();
-    	}   
+    private ResponseEntity<Map<String, Object>> fallBackReports(RuntimeException exception) {
+		return new ResponseEntity("los datos de Informes para este cliente no estan disponibles",
+				HttpStatus.NOT_FOUND);
+	}
 	
     @PostMapping
     public cliente save(@RequestBody cliente clientCurrent){

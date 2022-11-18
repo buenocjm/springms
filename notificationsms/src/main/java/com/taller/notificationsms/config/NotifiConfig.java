@@ -26,13 +26,13 @@ public class NotifiConfig {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 bootstrapAddress);
-        props.put(JsonSerializer.TYPE_MAPPINGS,"com.taller.notificationsms:com.taller.notificationsms.events.Event");
+        props.put(JsonSerializer.TYPE_MAPPINGS,"com.taller:com.taller.notificationsms.events.Event");
 
-        final JsonDeserializer<Event<?>> jsonDeserializer = new JsonDeserializer<>();
-        return new DefaultKafkaConsumerFactory(
-                props,
-                new StringDeserializer(),
-                jsonDeserializer);
+		
+		  final JsonDeserializer<Event<?>> jsonDeserializer = new JsonDeserializer<>();
+		  return new DefaultKafkaConsumerFactory( props, new StringDeserializer(),
+		  jsonDeserializer);
+		    
     }
 
     @Bean

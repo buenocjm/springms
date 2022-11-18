@@ -1,5 +1,7 @@
 package com.taller.gatewayzuul.filters;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -26,6 +28,21 @@ public class filterspre extends ZuulFilter{
 	     strLog.append("\n------ LO QUE TRAE PREFILTER ------\n");	  
 		final HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
 		LOGGER.info("\\n------ LO QUE TRAE PREFILTER ------\\n Petición {} a {}", request.getMethod(), request.getRequestURL().toString());
+		 RequestContext ctx = RequestContext.getCurrentContext();	    
+	    
+	     strLog.append("\n------ NEW REQUEST ------\n");	    
+	     strLog.append(String.format("Server: %s Metodo: %s Path: %s \n",ctx.getRequest().getServerName()	    		 
+					,ctx.getRequest().getMethod(),
+					ctx.getRequest().getRequestURI()));
+	     Enumeration<String> enume= ctx.getRequest().getHeaderNames();
+	     String header;
+	     while (enume.hasMoreElements())
+	     {
+	    	 header=enume.nextElement();
+	    	 strLog.append(String.format("Headers: %s = %s \n",header,ctx.getRequest().getHeader(header)));	    			
+	     };	  	    
+	     LOGGER.info(strLog.toString());
+
 		return null;
 	}
 

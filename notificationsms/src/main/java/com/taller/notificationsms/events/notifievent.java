@@ -1,7 +1,5 @@
 package com.taller.notificationsms.events;
 
-
-
 import com.taller.notificationsms.model.cliente;
 
 import lombok.Data;
