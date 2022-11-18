@@ -18,7 +18,7 @@ public class ClienteEventsService {
 	@Autowired
 	private KafkaTemplate<String, Event<?>> producer;
 	
-	@Value("${topic.customer.name:customers}")
+	@Value("${topic.customer.name:customer}")
 	private String topicCustomer;
 	
 	public void publish(cliente client) {
